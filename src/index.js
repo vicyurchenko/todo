@@ -5,11 +5,18 @@ import AppHeader from './components/app-header';
 import TodoList from './components/todo-list';
 
 const App = () => {
+
+  const deals = [
+    {label: "Buy Azelit", important: false},
+    {label: "Buy sunflowers oil", important: false},
+    {label: "Build React App", important: true},
+  ];
+
   return (
     <div>
       <AppHeader/>
       <SearchPanel/>
-      <TodoList/>
+      <TodoList todoDeals={deals} />
     </div>
   );
 }
