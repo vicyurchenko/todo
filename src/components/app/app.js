@@ -1,3 +1,4 @@
+import "./app.css";
 import AppHeader from "../app-header";
 import SearchPanel from "../search-panel";
 import ItemStatusFilter from "../item-status-filter";
