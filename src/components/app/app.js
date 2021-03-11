@@ -4,8 +4,12 @@ import SearchPanel from "../search-panel";
 import ItemStatusFilter from "../item-status-filter";
 import TodoList from "../todo-list";
 import React, {Component} from "react";
+import AddDealForm from "../add-deal-form";
 
 export default class App extends Component{
+
+    maxId = 100;
+
     state = {
         deals: [
             {label: "Buy Azelit", important: false, id: 1},
@@ -23,6 +27,21 @@ export default class App extends Component{
         } );
     }
 
+    addItem = (name) => {
+
+        const newItem = {
+          label: name,
+          important: false,
+          id: this.maxId++
+        };
+
+        this.setState( ({deals}) => {
+            return {
+                deals: [...deals, newItem]
+            }
+        } )
+    }
+
     render() {
         return (
             <div className="todo-app">
@@ -34,6 +53,7 @@ export default class App extends Component{
                 <TodoList
                     todoDeals={this.state.deals}
                     onDeleted = { this.deleteItem } />
+                <AddDealForm onDealAdd={this.addItem}/>
             </div>
         );
     }
