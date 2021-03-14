@@ -6,55 +6,86 @@ import TodoList from "../todo-list";
 import React, {Component} from "react";
 import AddDealForm from "../add-deal-form";
 
-export default class App extends Component{
+export default class App extends Component {
 
-    maxId = 100;
+  maxId = 100;
 
-    state = {
-        deals: [
-            {label: "Buy Azelit", important: false, id: 1},
-            {label: "Buy sunflowers oil", important: false, id: 2},
-            {label: "Build React App", important: true, id: 3},
-            {label: "Buy a chocolate for my future wife", important: true, id: 4},
-        ]
+  state = {
+    deals: [
+      this.getNewDeal("Buy Azelit"),
+      this.getNewDeal("Buy sunflowers oil"),
+      this.getNewDeal("Build React App"),
+      this.getNewDeal("Buy a chocolate for my future wife"),
+    ]
+  }
+
+  getNewDeal(label) {
+    return {
+      id: this.maxId++,
+      label: label,
+      important: false,
+      done: false,
     }
+  }
 
-    deleteItem = (id) => {
-        this.setState( ({deals}) => {
-            return {
-                deals: deals.filter(item => item.id !== id)
-            };
-        } );
-    }
+  deleteItem = (id) => {
+    this.setState(({deals}) => {
+      return {
+        deals: deals.filter(item => item.id !== id)
+      };
+    });
+  }
 
-    addItem = (name) => {
+  addItem = (name) => {
+    this.setState(({deals}) => {
+      return {deals: [...deals, this.getNewDeal(name)]}
+    });
+  }
 
-        const newItem = {
-          label: name,
-          important: false,
-          id: this.maxId++
-        };
+  toggleProperty = (arr, id, propName) => {
+    let newArr = [...arr];
+    const idx = newArr.findIndex((el) => el.id === id);
+    let newItem = newArr[idx];
+    newArr[idx] = {...newItem, [propName]: !newItem[propName]};
+    return newArr;
+  }
 
-        this.setState( ({deals}) => {
-            return {
-                deals: [...deals, newItem]
-            }
-        } )
-    }
+  onToggleImportant = (id) => {
+    this.setState(({deals}) => {
+      return {
+        deals: this.toggleProperty(deals, id, 'important')
+      }
+    })
+  }
 
-    render() {
-        return (
-            <div className="todo-app">
-                <AppHeader toDo={1} done={3}/>
-                <div className="top-panel d-flex">
-                    <SearchPanel/>
-                    <ItemStatusFilter/>
-                </div>
-                <TodoList
-                    todoDeals={this.state.deals}
-                    onDeleted = { this.deleteItem } />
-                <AddDealForm onDealAdd={this.addItem}/>
-            </div>
-        );
-    }
+  onToggleDone = (id) => {
+    this.setState(({deals}) => {
+      return {
+        deals: this.toggleProperty(deals, id, 'done')
+      }
+    })
+  }
+
+  render() {
+
+    const doneCount = this.state.deals.filter( (el) => el.done).length;
+    const todoCount = this.state.deals.length - doneCount;
+
+    return (
+      <div className="todo-app">
+        <AppHeader toDo={ todoCount } done={ doneCount }/>
+        <div className="top-panel d-flex">
+          <SearchPanel/>
+          <ItemStatusFilter/>
+        </div>
+        <TodoList
+          todoDeals={this.state.deals}
+          onDeleted={this.deleteItem}
+          onToggleImportant={this.onToggleImportant}
+          onToggleDone={this.onToggleDone}
+        />
+        <AddDealForm onDealAdd={this.addItem}/>
+      </div>
+    );
+  }
 }

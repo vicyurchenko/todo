@@ -7,7 +7,7 @@ export default class AddDealForm extends Component {
             <div className="add-deal-form">
                 <button
                     className="btn btn-outline-secondary"
-                    onClick={() => this.props.onDealAdd('new Deal')}
+                    onClick={() => this.props.onDealAdd('New Deal')}
                 >
                     Add New Deal
                 </button>
