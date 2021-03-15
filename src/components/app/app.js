@@ -72,7 +72,7 @@ export default class App extends Component {
   }
 
   search = (deals, matcher) => {
-    return deals.filter( (el) => el.label.match(matcher) );
+    return deals.filter( (el) => el.label.toLowerCase().indexOf(matcher.toLowerCase()) > -1 );
   }
 
   render() {
