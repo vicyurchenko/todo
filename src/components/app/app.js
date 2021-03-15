@@ -16,7 +16,8 @@ export default class App extends Component {
       this.getNewDeal("Buy sunflowers oil"),
       this.getNewDeal("Build React App"),
       this.getNewDeal("Buy a chocolate for my future wife"),
-    ]
+    ],
+    matcher: ''
   }
 
   getNewDeal(label) {
@@ -64,22 +65,33 @@ export default class App extends Component {
         deals: this.toggleProperty(deals, id, 'done')
       }
     })
+  };
+
+  onSearchChange = (el) => {
+    this.setState({matcher : el.target.value} )
+  }
+
+  search = (deals, matcher) => {
+    return deals.filter( (el) => el.label.match(matcher) );
   }
 
   render() {
 
+    const {deals, matcher} = this.state;
     const doneCount = this.state.deals.filter( (el) => el.done).length;
     const todoCount = this.state.deals.length - doneCount;
+
+    const visibleItems = this.search(deals, matcher)
 
     return (
       <div className="todo-app">
         <AppHeader toDo={ todoCount } done={ doneCount }/>
         <div className="top-panel d-flex">
-          <SearchPanel/>
+          <SearchPanel onSearchChange={this.onSearchChange}/>
           <ItemStatusFilter/>
         </div>
         <TodoList
-          todoDeals={this.state.deals}
+          todoDeals={visibleItems}
           onDeleted={this.deleteItem}
           onToggleImportant={this.onToggleImportant}
           onToggleDone={this.onToggleDone}

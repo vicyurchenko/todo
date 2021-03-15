@@ -1,3 +1,11 @@
 .add-deal-form {
     margin-top: 10px;
 }
+
+.add-deal-form input{
+    margin-right: 10px;
+}
+
+.add-deal-form button{
+    min-width: 150px;
+}
